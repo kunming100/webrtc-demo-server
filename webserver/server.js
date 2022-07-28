@@ -269,3 +269,27 @@ sockio.on("connection", (socket) => {
 httpServer.listen(3010, "localhost", function () {
   console.log("HTTP Server is running");
 });
+
+
+// 用户
+const userInfo = [
+  {
+    id: "382437913343",
+    name: "张三",
+  },
+  {
+    id: "894891429342",
+    name: "李四",
+  },
+  {
+    id: "972468303473",
+    name: "王五",
+  },
+];
+
+
+app.get('/api/getUserInfo', (req, res) => {
+  const { userId } = req.query;
+  const target = userInfo.find(n => n.id === userId)
+  res.send(target)
+})
