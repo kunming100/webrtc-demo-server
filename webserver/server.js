@@ -266,7 +266,7 @@ sockio.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3010, "localhost", function () {
+httpServer.listen(3010, "0.0.0.0", function () {
   console.log("HTTP Server is running");
 });
 
