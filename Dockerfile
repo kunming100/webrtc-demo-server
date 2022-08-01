@@ -5,4 +5,4 @@ COPY . /app
 WORKDIR /app
 RUN npm install
 EXPOSE 3010
-CMD npm serve
+CMD npm run serve
