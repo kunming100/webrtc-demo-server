@@ -50,20 +50,20 @@ const app = express();
 app.use(serveIndex(staticPath));
 app.use(express.static(staticPath));
 
-// //加载本地路径下的ssl证书，专用于https， 没相关的域名以及证书，https将无法访问，有证书在webserver路径下新建cert目录，将证书拷入
-// const options = {
-// 	key  : fs.readFileSync('./cert/XXXXXXXX.cn.key'),
-// 	cert : fs.readFileSync('./cert/XXXXXXXX.cn_bundle.pem')
-// }
+//加载本地路径下的ssl证书，专用于https， 没相关的域名以及证书，https将无法访问，有证书在webserver路径下新建cert目录，将证书拷入
+const options = {
+  key: fs.readFileSync("/etc/nginx/ssl/tanscode.cn.key"),
+  cert: fs.readFileSync("/etc/nginx/ssl/tanscode.cn.pem"),
+};
 
-// //httpsServer 有证书就直接拷贝到cert路径下，在填入options中，没有就填null，https服务将无法访问
-// var httpsServer = https.createServer(null, app);
-//httpServer
-var httpServer = http.createServer(app);
+//httpsServer 有证书就直接拷贝到cert路径下，在填入options中，没有就填null，https服务将无法访问
+var httpsServer = https.createServer(options, app);
+// //httpServer
+// var httpServer = http.createServer(app);
 
 // bind socket.io with httpsServer
 // var io = socketIo.listen(httpsServer);
-var sockio = new ioServer(httpServer, {
+var sockio = new ioServer(httpsServer, {
   cors: {
     // 本地调试
     // origin: "http://localhost:3000",
@@ -116,15 +116,6 @@ function isRoomowner(roomId, userId) {
   }
   const roomowner = roomowerMap.get(roomId);
   return roomowner === userId;
-  // const roomownerIterator = roomowerMap.entries();
-  // let isRoomowner = false;
-  // let temp = roomownerIterator.next();
-  // while(!isRoomowner && !temp.done) {
-  //   const [ , roomownerUserId ] = temp.value;
-  //   isRoomowner = userId === roomownerUserId;
-  //   !isRoomowner && (temp = roomownerIterator.next());
-  // }
-  // return isRoomowner;
 }
 
 /**
@@ -268,7 +259,7 @@ sockio.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3010, "0.0.0.0", function () {
+httpsServer.listen(3010, "0.0.0.0", function () {
   console.log("HTTP Server is running");
 });
 
