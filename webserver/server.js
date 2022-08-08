@@ -13,7 +13,7 @@ const MAX_USER_LIMIT = 3;
 // socket 命令
 const SOCKET_COMMAND = {
   // peer connection 已创建
-  CREATED_PC: 'createPC',
+  CREATED_PC: "createPC",
   // 交换SDP的命令
   SDP: "sdp",
   // ICE candidate
@@ -35,7 +35,7 @@ const SOCKET_COMMAND = {
   // 其他人已离开房间
   OTHER_LEFT: "otherLeft",
   // 更换房主
-  CHANGE_ROOMOWNER: 'changeRoomowner',
+  CHANGE_ROOMOWNER: "changeRoomowner",
   // 已中断连接
   DISCONNECTED: "disconnected",
   // 房间已满
@@ -65,7 +65,9 @@ var httpServer = http.createServer(app);
 // var io = socketIo.listen(httpsServer);
 var sockio = new ioServer(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    // 本地调试
+    // origin: "http://localhost:3000",
+    origin: "http://tankscode.cn",
   },
 });
 
@@ -88,7 +90,7 @@ function getRoom(roomId) {
 async function getSocketsInRoom(roomId, excludes = []) {
   const room = getRoom(roomId);
   if (!room) {
-    console.log('找不到房间')
+    console.log("找不到房间");
     return [];
   }
   const socketSet = await sockio.sockets.adapter.sockets(room);
@@ -110,7 +112,7 @@ async function getSocketsInRoom(roomId, excludes = []) {
  */
 function isRoomowner(roomId, userId) {
   if (!roomowerMap.has(roomId)) {
-    return false
+    return false;
   }
   const roomowner = roomowerMap.get(roomId);
   return roomowner === userId;
@@ -266,10 +268,12 @@ sockio.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(3010, "0.0.0.0", function () {
+// httpServer.listen(3010, "0.0.0.0", function () {
+//   console.log("HTTP Server is running");
+// });
+httpServer.listen(3010, function () {
   console.log("HTTP Server is running");
 });
-
 
 // 用户
 const userInfo = [
@@ -287,9 +291,8 @@ const userInfo = [
   },
 ];
 
-
-app.get('/api/getUserInfo', (req, res) => {
+app.get("/api/getUserInfo", (req, res) => {
   const { userId } = req.query;
-  const target = userInfo.find(n => n.id === userId)
-  res.send(target)
-})
+  const target = userInfo.find((n) => n.id === userId);
+  res.send(target);
+});
