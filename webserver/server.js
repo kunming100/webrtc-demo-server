@@ -57,12 +57,12 @@ const options = {
 };
 
 //httpsServer 有证书就直接拷贝到cert路径下，在填入options中，没有就填null，https服务将无法访问
-var httpsServer = https.createServer(options, app);
+const httpsServer = https.createServer(options, app);
 // //httpServer
-// var httpServer = http.createServer(app);
+// const httpServer = http.createServer(app);
 
 // bind socket.io with httpsServer
-var sockio = new ioServer(httpsServer, {
+const sockio = new ioServer(httpsServer, {
   cors: {
     // 本地调试
     // origin: "http://localhost:3000",
