@@ -62,12 +62,11 @@ var httpsServer = https.createServer(options, app);
 // var httpServer = http.createServer(app);
 
 // bind socket.io with httpsServer
-// var io = socketIo.listen(httpsServer);
 var sockio = new ioServer(httpsServer, {
   cors: {
     // 本地调试
     // origin: "http://localhost:3000",
-    origin: "http://tankscode.cn",
+    origin: "https://tankscode.cn",
   },
 });
 
